@@ -38,7 +38,7 @@ void mindset_gfx_set_mode(unsigned char mode)
   union REGS regs;
   regs.h.ah=0x00;
   regs.h.al=mode;
-  int86(INT_VIDEO,&regs,&regs);
+  int86(0xEE,&regs,&regs);
 }
 
 /**
@@ -72,7 +72,7 @@ void mindset_gfx_get_mode(unsigned char* mode, unsigned short* flags, unsigned s
 {
   union REGS regs;
   regs.h.ah=0x01;
-  int86(INT_VIDEO,&regs,&regs);
+  int86(0xEE,&regs,&regs);
   *mode=regs.h.al;
   *flags=regs.w.bx;
   *bpp=regs.w.cx;
@@ -96,7 +96,53 @@ void mindset_gfx_get_mode(unsigned char* mode, unsigned short* flags, unsigned s
 void mindset_gfx_set_display_device(unsigned char device)
 {
   union REGS regs;
-  regs.h.ax=0x02;
+  regs.h.ah=0x02;
   regs.h.al=device;
-  int86(INT_VIDEO,&regs,&regs);
+  int86(0xEE,&regs,&regs);
+}
+
+/**
+ * Set screen position
+ * Function: Sets the position of the screen within the screen border.
+ * Description: The SET SCREEN POSITION command uses a single parameter to
+ * define the position of the screen within the screen border.
+ * This 1-byte parameter uses the most significant 4 bits to specify the vertical (Y-axis) location of the screen and the least
+ * significant 4 bits to speoify the horizontal (X-axis) location.
+ *
+ * Setting (AL) to OOH places the screen at the upper left corner
+ * of the border and OFFH places the screen at the lower right corner of the border.
+ * The SET SCREEN POSITION command affects only the current setting. The system configuration screen defines the default
+ * setting.
+ * (AL) is the location of the screen. Bits 0 through 3 specify the X-coordinate of the screen, and bits 4 through
+ * 7 specify the Y-coordinate.
+ *
+ */
+void mindset_gfx_set_screen_position(unsigned char position)
+{
+  union REGS regs;
+  regs.h.ah=0x03;
+  regs.h.al=position;
+  int86(0xEE,&regs,&regs);
+}
+
+/**
+ * Function: Returns the position of the screen within the screen border.
+ * Description: The GET SCREEN POSITION command returns a single parameter that
+ * reports the current position of the screen within the screen
+ * border. This 1-byte parameter uses the most significant 4 bits
+ * to specify the vertical (Y-axis) location of the screen and the
+ * least significant 4 bits to specify the horizontal (X-axis)
+ * location.
+ * 
+ * A value of OOH in (AL) causes the screen to appear at the upper
+ * left corner of the border and OFFH causes the screen to appear
+ * at the lower right corner of the border.
+ *
+ */
+unsigned char mindset_gfx_get_screen_position(void)
+{
+  union REGS regs;
+  regs.h.ah=0x04;
+  int86(0xEE,&regs,&regs);
+  return regs.h.al;
 }
