@@ -37,4 +37,33 @@
  */
 void mindset_gfx_set_mode(unsigned char mode);
 
+/**
+ * Get the current screen mode, video flags, and bits per pixel
+ *
+ * mode - The current video mode.
+ * flags - The current video mode flags
+ *         bit       definition
+ *         --------------------------------------------------------
+ *           0       System Flag
+ *           1       Industry-Standard APA mode enabled.
+ *           2       Industry-Standard character mode enabled.
+ *           3       Double-Buffering enabled
+ *           4       50Hz (PAL) mode, otherwise 60Hz NTSC
+ *           5       System Flag
+ *           6       current mode is interlaced.
+ *           7       System
+ *           8       External sync enabled
+ *           9       Genlock is enabled
+ *          10       Second frame buffer is on display.
+ *          11       80-column character mode enabled
+ *          12       System flag
+ *          13       PAL mode, otherwise NTSC
+ *          14       TV mode enabled, otherwise Monitor
+ *          15       B&W TV mode enabled, otherwise colorburst enabled.
+ *
+ * bpp - The number of bits per pixel.
+ *
+ */
+void mindset_gfx_get_mode(unsigned char* mode, unsigned short* flags, unsigned short* bpp);
+
 #endif /* LIBMINDSET_GFX_H */
