@@ -238,3 +238,68 @@ void mindset_gfx_set_display_interrupt(unsigned char line, unsigned char marker)
   regs.h.bl=marker;
   int86(0xEE,&regs,&regs);
 }
+
+/**
+ * Set Palette
+ *
+ * Specifies the contents of the color palette and selects the
+ * color of the screen border.
+ * Description: The SET PALETTE command specifies all or part of the contents of
+ * the color palette and selects the screen border color. The user
+ * must supply a color data array in memory that the SET PALETTE
+ * command copies into the color palette.
+ *
+ * The SET PALETTE command includes a BORDER color parameter, an
+ * offset into the color palette, a count of the number of words to
+ * be copied to the color palette (N), and an ARRAY parameter that
+ * is a pointer to the first word of the user-supplied color data.
+ *
+ * The BORDER parameter of the SET PALETTE command is an index
+ * that selects an entry from the color palette as the screen
+ * border color. The system ignores BORDER values greater than
+ * decimal 15.
+ * 
+ * The offset parameter is an index value from 0 to 15 that specifies a word within the color palette. Beginning with this
+ * word, the system copies the user-specified color data into the
+ * color palette.
+ * The num parameter specifies the number of words to copy from the
+ * user array to the color palette. This value must be from 0 to
+ * 16. The system does not alter the color palette if the value of
+ * num is 0.
+ *
+ * The palette parameter is the address of the first word to be copied from the user array to the color palette. 
+ *
+ * Each 16-bit word of the palette is arranged thusly:
+ * ---------------------------------
+ * |M|M|M|M|U|U|T|T|T|T|T|T|T|T|T|T|
+ * |I|R|G|B|U|U|K|B|B|B|G|G|G|R|R|R|
+ * ---------------------------------
+ * The most significant four bits are used for RGBI in monitor mode
+ * The least significant 9 bits are used for TV mode, thus one 16-bit
+ * palette entry defines colors for both modes independently.
+ *
+ * M - Monitor color
+ * T - Television color
+ * R - Red
+ * G - Green
+ * B - Blue
+ * I - Intensity
+ * K - Key onto external video
+ * U - Unused
+ *
+ */
+void mindset_gfx_set_palette(unsigned char border, unsigned short num, unsigned short offset, unsigned short* palette)
+{
+  union REGS regs;
+  struct SREGS sregs;
+
+  segread(&sregs);
+  
+  regs.h.ah=0x0A;
+  regs.h.al=border;
+  regs.w.cx=num;
+  regs.w.dx=offset;
+  regs.w.bx=FP_OFF(palette);
+  sregs.es=FP_SEG(palette);
+  int86x(0xEF,&regs,&regs,&sregs);
+}
