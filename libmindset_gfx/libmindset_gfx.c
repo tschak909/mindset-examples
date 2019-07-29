@@ -38,7 +38,7 @@ void mindset_gfx_set_mode(unsigned char mode)
   union REGS regs;
   regs.h.ah=0x00;
   regs.h.al=mode;
-  int86(0xEE,&regs,&regs);
+  int86(0xEF,&regs,&regs);
 }
 
 /**
@@ -72,7 +72,7 @@ void mindset_gfx_get_mode(unsigned char* mode, unsigned short* flags, unsigned s
 {
   union REGS regs;
   regs.h.ah=0x01;
-  int86(0xEE,&regs,&regs);
+  int86(0xEF,&regs,&regs);
   *mode=regs.h.al;
   *flags=regs.w.bx;
   *bpp=regs.w.cx;
@@ -145,4 +145,96 @@ unsigned char mindset_gfx_get_screen_position(void)
   regs.h.ah=0x04;
   int86(0xEE,&regs,&regs);
   return regs.h.al;
+}
+
+/**
+ * Function: Enables or disables the use of genlock for transparent colors,
+ * enables or disables interlaced sync display, and enables or
+ * disables fixed-phase display.
+ * 
+ * Description: The SET DISPLAY SYNC FEATURES command performs three distinct
+ * but related functions: enabling genlock, enabling interlaced
+ * sync display, and enabling fixed-phase display. Enabling genlock makes certain colors transparent so that an external video
+ * signal can show through.
+ * 
+ * Normally, the Mindset computer provides its own sync signal for
+ * video operation (internal video synchronization is the default).
+ * Using genlock, the Mindset computer can alternat·ively synchronize its output with the output from another video device such
+ * as a camera or video tape recorder. The genlock enable bit
+ * determines whether the Mindset computer provides its sync signal
+ * independently or matches its sync signal with the sync signal of
+ * an external device.
+ * 
+ * Genlock is normally disabled. When the user enables genlock, it
+ * affects only the colors that do not have the key bit set within
+ * their color palette definition; enabling genlock makes these
+ * colors transparent. This feature is most useful for making the
+ * background transparent so that an external video signal provides
+ * the background.
+ * 
+ * The interlaced sync display is normally disabled. Enabled, this
+ * feature uses 200 lines of display data, but displays data with
+ * an interlaced sync using 400 scan lines. Using an even/odd scan
+ * line pair to display each row of pixels creates a more filled-in
+ * look on the display.
+ * 
+ * Fixed-phase synchronization, when enabled, provides more flexibility in pixel-by-pixel color mixing and prevents flashing on
+ * the display. However, it also changes the television display so
+ * that some pictures may appear distorted.
+ *
+ * Bit    Definition
+ * -----------------
+ *   0    Enable Genlock
+ *   1    not used
+ *   2    interlaced sync
+ *   3    fixed phase 
+ */
+void mindset_gfx_set_display_sync_features(unsigned char features)
+{
+  union REGS regs;
+  regs.h.ah=0x06;
+  regs.h.al=features;
+  int86(0xEE,&regs,&regs);
+}
+
+/**
+ * Set Display Interrupt
+ * Specifies the scan line at which the display processor causes
+ * the CPU to perform a user-defined interrupt service routine.
+ * This command also enables and disables a diagnostic marker that
+ * appears on the specified scan line.
+ * Description: The SET DISPLAY INTERRUPT command enables the user to synchronize animation with the drawing of the screen by the display
+ * processor. This command controls a marker to assist the user in
+ * tracing the operation of the display interrupt. This diagnostic
+ * Input
+ * j marker is a horizontal line that appears on the scan line that
+ * triggers the display interrupt.
+ * The display interrupt operates only in the graphics mode of the
+ * Mindset computer.
+ * 
+ * A scan line is comprised of a row of pixels. The top scan line
+ * on the screen is line 0 and the bottom scan line is line 199.
+ * In interlaced graphics modes, the bottom scan line is effectively the 398th (on even line passes) or 399th (on odd line
+ * passes) line displayed, but is still referred to as line 199 in
+ * this command because it is the 199th line scanned on each pass.
+ * If the user does not define a scan line with the SET DISPLAY
+ * INTERRUPT command, the system uses line 199 as the default scan
+ * line for calling the user-defined interrupt routine.
+ * Use the SET DISPLAY INT ADDRESS command to specify the address
+ * of the user-defined service routine (see "Graphics Coprocessor
+ * Operation" later in this section). The default value for this
+ * vector is zero. If the vector is zero, the system does not call
+ * a user-defined interrupt service routine. ':'(
+ * 
+ * line - Scanline to trigger display interrupt (0-199)
+ * marker - enable/disable diagnostic marker for display interrupt line
+ *
+ */
+void mindset_gfx_set_display_interrupt(unsigned char line, unsigned char marker)
+{
+  union REGS regs;
+  regs.h.ah=0x07;
+  regs.h.al=line;
+  regs.h.bl=marker;
+  int86(0xEE,&regs,&regs);
 }
