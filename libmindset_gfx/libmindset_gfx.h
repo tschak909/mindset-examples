@@ -66,4 +66,21 @@ void mindset_gfx_set_mode(unsigned char mode);
  */
 void mindset_gfx_get_mode(unsigned char* mode, unsigned short* flags, unsigned short* bpp);
 
+/**
+ * Set display Device
+ * Function: Sets the display for either a television or an RGB color monitor
+ * and then reloads the color palette.
+ * Description: The SET DISPLAY DEVICE command changes the current display setup
+ * to that for a color television, black-and-white television, or
+ * color monitor. After the system changes the setup, it reloads
+ * the color palette for the selected device.
+ *
+ * sets the display setup according to the following bits:
+ *
+ * Bit 0: - is a 0 for television operation, or 1 for monitor operation.
+ * Bit 1: - is a 0 for color television, or a 1 for B/W television only.
+ *
+ */
+void mindset_gfx_set_display_device(unsigned char device);
+
 #endif /* LIBMINDSET_GFX_H */
