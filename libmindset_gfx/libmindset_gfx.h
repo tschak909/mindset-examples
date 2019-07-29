@@ -13,6 +13,8 @@
 #ifndef LIBMINDSET_GFX_H
 #define LIBMINDSET_GFX_H
 
+#define INT_VIDEO 0xEF
+
 /**
  * Set Screen mode
  *
