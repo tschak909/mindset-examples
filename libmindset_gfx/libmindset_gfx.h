@@ -238,7 +238,7 @@ void mindset_gfx_set_display_interrupt(unsigned char line, unsigned char marker)
  * U - Unused
  *
  */
-void mindset_gfx_set_palette(unsigned char border, unsigned short num, unsigned short offset, unsigned long* palette);
+void mindset_gfx_set_palette(unsigned char border, unsigned short num, unsigned short offset, unsigned short* palette);
 
 /**
  * Get Color Palette
