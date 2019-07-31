@@ -1178,7 +1178,7 @@ void mindset_gfx_blt_polypoint(unsigned char blt_id, unsigned short len, unsigne
  * params[1]      Y Coordinate (in pixels)
  *
  */
-void mindset_gfx_blt_polyline(unsigned char blt_id, unsigned short len, unsigned char c, unsigned char mode, short x, short y, unsigned short __far *params)
+void mindset_gfx_blt_polyline(unsigned char blt_id, unsigned short len, unsigned char c, unsigned char mode, short x, short y, PolyLineParams __far *params)
 {
   union REGS regs;
   struct SREGS sregs;
@@ -1621,7 +1621,7 @@ void mindset_gfx_gcp_wait(unsigned char* blt_id, unsigned short* collision_statu
  * params[1]    Y coordinate (in pixels)
  *
  */
-void mindset_gfx_blt_polygon(unsigned char blt_id, unsigned short len, unsigned char ce, unsigned char co, short x, short y, unsigned short __far *params)
+void mindset_gfx_blt_polygon(unsigned char blt_id, unsigned short len, unsigned char ce, unsigned char co, short x, short y, PolygonParams __far *params)
 {
   union REGS regs;
   struct SREGS sregs;
