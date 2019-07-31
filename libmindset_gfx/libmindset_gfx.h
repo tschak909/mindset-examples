@@ -864,7 +864,12 @@ void mindset_gfx_blt_copy_word(unsigned char blt_id, unsigned short len, short x
  * params         far pointer to first 4-byte parameter.
  *
  */
-void mindset_gfx_blt_polypoint(unsigned char blt_id, unsigned short len, unsigned char c, short x, short y, unsigned short __far *params);
+typedef struct _polypointparams {
+  short x;
+  short y;
+} PolyPointParams;
+
+void mindset_gfx_blt_polypoint(unsigned char blt_id, unsigned short len, unsigned char c, short x, short y, PolyPointParams __far *params);
 
 /**
  * Function:

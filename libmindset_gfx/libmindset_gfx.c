@@ -1072,7 +1072,7 @@ void mindset_gfx_blt_copy_word(unsigned char blt_id, unsigned short len, short x
  * params[1]      Y coordinate (in pixels)
  *
  */
-void mindset_gfx_blt_polypoint(unsigned char blt_id, unsigned short len, unsigned char c, short x, short y, unsigned short __far *params)
+void mindset_gfx_blt_polypoint(unsigned char blt_id, unsigned short len, unsigned char c, short x, short y, PolyPointParams __far *params)
 {
   union REGS regs;
   struct SREGS sregs;
