@@ -1966,7 +1966,7 @@ void mindset_gfx_fill_dest_buffer(unsigned short pattern)
  *                   character position if Bitmap Offset is -1.
  *
  */
-void mindset_gfx_set_font_pointer(unsigned char __far* fontp)
+void mindset_gfx_set_font_pointer(Font __far* fontp)
 {
   union REGS regs;
   struct SREGS sregs;
@@ -1988,7 +1988,7 @@ void mindset_gfx_set_font_pointer(unsigned char __far* fontp)
  * using the SET FONT POINTER command. See SET FONT POINTER for a
  * description of the font pointer and font data information.
  */
-void mindset_gfx_get_font_pointer(unsigned char __far* fontp)
+void mindset_gfx_get_font_pointer(Font __far* fontp)
 {
   union REGS regs;
   struct SREGS sregs;
@@ -2061,7 +2061,7 @@ void mindset_gfx_get_font_pointer(unsigned char __far* fontp)
  *            or a value of 0xFFFF in this field.
  *
  */
-void mindset_gfx_blt_string(unsigned char blt_id, unsigned short len, unsigned char c_offset, unsigned char direction, unsigned char c, short x, short y, unsigned short __far* params)
+void mindset_gfx_blt_string(unsigned char blt_id, unsigned short len, unsigned char c_offset, unsigned char direction, unsigned char c, short x, short y, Text __far* params)
 {
   union REGS regs;
   struct SREGS sregs;

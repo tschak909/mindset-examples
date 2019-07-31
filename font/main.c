@@ -11,18 +11,7 @@
 #include <i86.h>
 #include <libmindset_gfx.h>
 
-typedef struct _fontdata {
-  unsigned char type;
-  unsigned char excess;
-  unsigned short nominal_width;
-  unsigned short nominal_height;
-  unsigned short byte_width;
-  unsigned short __far *addr;
-  unsigned char first;
-  unsigned char last;
-} FontData;
-
-FontData fd;
+Font f;
 
 unsigned short palette[16]={
   0x0000, // Black
@@ -43,15 +32,7 @@ unsigned short palette[16]={
   0xF1FF  // White
 };
 
-typedef struct _textparams {
-  unsigned short x;
-  unsigned short y;
-  unsigned short len;
-  unsigned short off;
-  unsigned short seg;
-} TextParams;
-
-TextParams tp;
+Text t;
 
 char* text=" !@#$%&'()";
 
@@ -74,24 +55,24 @@ int main(int argc, char* argv[])
   mindset_gfx_set_mode(2); // 320x200x4
   mindset_gfx_set_palette(0,16,0,&palette);
 
-  fd.type=0; // Fixed font.
-  fd.excess=0; // no excess space.
-  fd.nominal_width=8; // nominal width in pixels
-  fd.nominal_height=8; // nominal height in pixels
-  fd.byte_width=2;   // bitmap for each line takes up 1 word.
-  fd.addr=MK_FP(FP_SEG(&fontbitmap),FP_OFF(&fontbitmap));
-  fd.first=0x20;
-  fd.last=0x29;
+  f.type=0; // Fixed font.
+  f.excess=0; // no excess space.
+  f.nominal_width=8; // nominal width in pixels
+  f.nominal_height=8; // nominal height in pixels
+  f.byte_width=2;   // bitmap for each line takes up 1 word.
+  f.addr=MK_FP(FP_SEG(&fontbitmap),FP_OFF(&fontbitmap));
+  f.first=0x20;
+  f.last=0x29;
 
-  mindset_gfx_set_font_pointer((unsigned char __far *)&fd);
+  mindset_gfx_set_font_pointer(&f);
 
-  tp.x=0;
-  tp.y=0;
-  tp.len=9;
-  tp.off=FP_OFF(&text);
-  tp.seg=FP_SEG(&text);
+  t.x=0;
+  t.y=0;
+  t.len=9;
+  t.off=FP_OFF(&text);
+  t.seg=FP_SEG(&text);
   
-  mindset_gfx_blt_string(0,1,0,0,12,0,0,(unsigned short *)&tp);
+  mindset_gfx_blt_string(0,1,0,0,12,0,0,&t);
 
   for (;;) { }
   
