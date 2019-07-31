@@ -1,7 +1,7 @@
 /**
- * Polyline example
+ * Polygon example
  *
- * Draws a bunch of lines with fill
+ * Draws a bunch of filled polys
  */
 
 #include <libmindset_gfx.h>
@@ -30,11 +30,11 @@ unsigned short palette[16]={
   0xF1FF  // White
 };
 
-PolyLineParams pl[128];
+PolygonParams pg[8];
 
 int main(int argc, char* argv[])
 {
-  unsigned char c; // Color.
+  unsigned char co,ce; // Color.
   unsigned char i; // index.
   
   mindset_gfx_set_mode(2);
@@ -43,15 +43,16 @@ int main(int argc, char* argv[])
   while (!kbhit())
     {
 
-      c=rand()&0xFF;
+      co=rand()&0xFF;
+      ce=rand()&0xFF;
       
-      for (i=0;i<128;i++)
+      for (i=0;i<8;i++)
 	{
-	  pl[i].x=rand()&0xff;
-	  pl[i].y=rand()&0xff>>1;
+	  pg[i].x=rand()&0xff;
+	  pg[i].y=rand()&0xff>>1;
 	}
 
-      mindset_gfx_blt_polyline(0,128,c,1,0,0,&pl);      
+      mindset_gfx_blt_polygon(0,8,ce,co,0,0,&pg);
     }
   return 0;
 }

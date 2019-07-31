@@ -1,12 +1,15 @@
 /**
- * Polyline example
+ * BLT COPY WORD example
  *
- * Draws a bunch of lines with fill
+ * Draws a bunch of filled boxes
  */
 
 #include <libmindset_gfx.h>
 #include <stdlib.h>
 #include <conio.h>
+
+#define true 1
+#define false !true
 
 // see the comments on mindset_gfx_set_palette() for
 // information on how the palette words are defined.
@@ -30,28 +33,31 @@ unsigned short palette[16]={
   0xF1FF  // White
 };
 
-PolyLineParams pl[128];
+CopyWordParams cw[128];
 
 int main(int argc, char* argv[])
 {
-  unsigned char c; // Color.
   unsigned char i; // index.
+  unsigned char quit=false;
   
   mindset_gfx_set_mode(2);
   mindset_gfx_set_palette(0,16,0,&palette);
 
-  while (!kbhit())
-    {
-
-      c=rand()&0xFF;
-      
+  while (quit==false)
+    {      
       for (i=0;i<128;i++)
 	{
-	  pl[i].x=rand()&0xff;
-	  pl[i].y=rand()&0xff>>1;
+	  cw[i].pattern=rand();
+	  cw[i].x=rand()&0xff;
+	  cw[i].y=rand()&0xff>>1;
+	  cw[i].width=rand()&0xff;
+	  cw[i].height=rand()&0xff>>1;
 	}
 
-      mindset_gfx_blt_polyline(0,128,c,1,0,0,&pl);      
+      mindset_gfx_blt_copy_word(0,128,0,0,&cw);
+      if (kbhit())
+	quit=true;
     }
+  
   return 0;
 }

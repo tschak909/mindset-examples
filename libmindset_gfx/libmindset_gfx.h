@@ -802,7 +802,15 @@ void mindset_gfx_blt_copy(unsigned char blt_id, unsigned short len, unsigned sho
  *                   If so, last entry in list should have 0xFFFF
  *
  */
-void mindset_gfx_blt_copy_word(unsigned char blt_id, unsigned short len, short x, short y, unsigned short __far *params);
+typedef struct _copywordparams {
+  unsigned short pattern;
+  short x;
+  short y;
+  unsigned short width;
+  unsigned short height;
+} CopyWordParams;
+
+void mindset_gfx_blt_copy_word(unsigned char blt_id, unsigned short len, short x, short y, CopyWordParams __far *params);
 
 /**
  * Function: Draws a collection of points of the same color into the destination
