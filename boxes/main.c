@@ -35,6 +35,12 @@ unsigned short palette[16]={
 
 CopyWordParams cw[128];
 
+unsigned short color_lookup[16]=
+  {
+   0x0000,0x1111,0x2222,0x3333,0x4444,0x5555,0x6666,0x7777,
+   0x8888,0x9999,0xAAAA,0xBBBB,0xCCCC,0xDDDD,0xEEEE,0xFFFF
+  };
+
 int main(int argc, char* argv[])
 {
   unsigned char i; // index.
@@ -47,7 +53,7 @@ int main(int argc, char* argv[])
     {      
       for (i=0;i<128;i++)
 	{
-	  cw[i].pattern=rand();
+	  cw[i].pattern=color_lookup[rand()&0x0f];
 	  cw[i].x=rand()&0xff;
 	  cw[i].y=rand()&0xff>>1;
 	  cw[i].width=rand()&0xff;

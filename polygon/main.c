@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
   unsigned char co,ce; // Color.
   unsigned char i; // index.
   
-  mindset_gfx_set_mode(4);
+  mindset_gfx_set_mode(2);
   mindset_gfx_set_palette(0,16,0,&palette);
 
   while (!kbhit())
