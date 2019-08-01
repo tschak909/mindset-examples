@@ -14,6 +14,45 @@
 #include "libmindset_rs232.h"
 
 /**
+ * Function: Specifies initialization parameters for a selected communications
+ * port.
+ *
+ * Description: The INITIALIZE COM PORT RS-232-C I/O command specifies the baud
+ * rate, parity, stop bit, and number of data bits per character
+ * for the communications port.
+ */
+unsigned short mindset_rs232_init_com_port(unsigned short port, ComPortParams* params, ComPortStatus* status)
+{
+  union REGS regs;
+  regs.h.ah=0x00;
+  regs.h.al=params->params;
+  regs.w.dx=port;
+  int86(0x14,&regs,&regs);
+  return regs.x.ax;
+}
+
+/**
+ * Function: Returns the status of the selected communications port.
+ *
+ *Description: The GET COM PORT STATUS RS-232-C 1/0 command returns the status
+ * of the selected communications port.
+ * The GET COM PORT STATUS routine clears the error and status
+ * conditions after placing the corresponding bits in AH and AL. 
+ */
+void mindset_rs232_get_com_port_status(unsigned short port, ComPortStatus* cs, ModemStatus* ms)
+{
+  union REGS regs;
+
+  regs.h.ah=0x03;
+  regs.w.dx=port;
+
+  int86(0x14,&regs,&regs);
+
+  cs->flags=regs.h.ah;
+  ms->flags=regs.h.al;
+}
+
+/**
  * Function: Writes one character to the RS-232-C output buffer.
  * 
  * Description: The RS-232~C SEND CHARACTER command writes one character to the

@@ -45,6 +45,38 @@ typedef union modemstatus
   unsigned char flags; // Get everything as one byte.
 } ModemStatus;
 
+typedef union _comportparams
+{
+  struct __comportparams
+  {
+    unsigned char data_bits: 2;
+    unsigned char stop_bits: 1;
+    unsigned char parity: 2;
+    unsigned char baud: 3;
+  };
+  unsigned char params;
+} ComPortParams;
+
+/**
+ * Function: Specifies initialization parameters for a selected communications
+ * port.
+ *
+ * Description: The INITIALIZE COM PORT RS-232-C I/O command specifies the baud
+ * rate, parity, stop bit, and number of data bits per character
+ * for the communications port.
+ */
+unsigned short mindset_rs232_init_com_port(unsigned short port, ComPortParams* params, ComPortStatus* status);
+
+/**
+ * Function: Returns the status of the selected communications port.
+ *
+ *Description: The GET COM PORT STATUS RS-232-C 1/0 command returns the status
+ * of the selected communications port.
+ * The GET COM PORT STATUS routine clears the error and status
+ * conditions after placing the corresponding bits in AH and AL. 
+ */
+void mindset_rs232_get_com_port_status(unsigned short port, ComPortStatus* cs, ModemStatus* ms);
+  
 /**
  * Function: Writes one character to the RS-232-C output buffer.
  * 
