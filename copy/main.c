@@ -6,13 +6,14 @@
 
 #include <conio.h>
 #include <i86.h>
+#include <stdlib.h>
 #include <libmindset_gfx.h>
 #include "pacman.h"
 
 unsigned short __far* pp;
 
 unsigned short palette[16]={
-  0xF1FF, // Black
+  0x0000, // Black
   0x10C0, // Dark Blue
   0x2018, // Dark Green
   0x30D8, // Dark Cyan
@@ -46,7 +47,7 @@ int main(int argc, char* argv[])
   
   blt_params[0]=FP_OFF(&pacman[0]);          // Source offset
   blt_params[1]=FP_SEG(&pacman[0]);          // Source seg
-  blt_params[2]=16;                // 16 bytes?
+  blt_params[2]=8;                // 16 bytes?
   blt_params[3]=0;                 // X source offset
   blt_params[4]=0;                 // Y source offset
   blt_params[5]=128;                 // X dest   offset
@@ -68,6 +69,9 @@ int main(int argc, char* argv[])
   
   while (!kbhit())
     {
+      blt_params[5]=rand()&0xFF;
+      blt_params[6]=rand()&0x7F;
+      int86x(0xEF,&regs,&regs,&sregs);
       
     }
 
