@@ -111,7 +111,7 @@ WCC
 28
 WString
 21
-?????No optimizations
+?????Compiler default
 1
 0
 29
@@ -122,8 +122,8 @@ WString
 WCC
 31
 WString
-26
-?????Fastest possible code
+21
+?????2-byte alignment
 1
 1
 32
