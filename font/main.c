@@ -11,8 +11,6 @@
 #include <i86.h>
 #include <libmindset_gfx.h>
 
-Font f;
-
 unsigned short palette[16]={
   0x0000, // Black
   0x10C0, // Dark Blue
@@ -31,8 +29,6 @@ unsigned short palette[16]={
   0xE03F, // Light Yellow
   0xF1FF  // White
 };
-
-Text t;
 
 const char* text="0123456789";
 
@@ -315,31 +311,51 @@ const unsigned char fontdata[]=
 
 int main(int argc, char* argv[])
 {
+  union REGPACK regs;
+  unsigned short fontpointer[7];
+  unsigned short textpointer[5];
   mindset_gfx_set_mode(2); // 320x200x4
   mindset_gfx_set_palette(0,16,0,&palette);
 
-  f.type=0; // Fixed font.
-  f.excess=0; // no excess space.
-  f.nominal_width=8; // nominal width in pixels
-  f.nominal_height=8; // nominal height in pixels
-  f.byte_width=256;   // bitmap for each line takes up 1 word.
-  f.addr=MK_FP(FP_SEG(&fontdata),FP_OFF(&fontdata));
-  f.first=0x00;
-  f.last=0xFF;
+  fontpointer[0]=0x0000; // fixed font, no excess interspacing
+  fontpointer[1]=0x0008; // 8px wide
+  fontpointer[2]=0x0008; // 8px high
+  fontpointer[3]=0x0100; // stride is 256 ytes long.
+  fontpointer[4]=FP_OFF(fontdata);
+  fontpointer[5]=FP_SEG(fontdata);
+  fontpointer[6]=0xFF00; // First and last 
+  
+  // Set font pointer.
+  regs.h.ah=0x1f;
+  regs.w.es=FP_SEG(fontpointer);
+  regs.w.bx=FP_OFF(fontpointer);
+  intr(0xEF,&regs);
 
-  mindset_gfx_set_font_pointer(&f);
+  // Set up text parameter block.
+  textpointer[0]=0x0040; // X
+  textpointer[1]=0x0040; // Y
+  textpointer[2]=10;     // Len
+  textpointer[3]=FP_OFF(text);
+  textpointer[4]=FP_SEG(text);
 
-  t.x=64;
-  t.y=64;
-  t.len=9;
-  t.off=FP_OFF(&text);
-  t.seg=FP_SEG(&text);
-
+  // Set up text string call
+  regs.h.ah=0x21;       // BLT STRING
+  regs.h.al=1;          // BLT ID 1
+  regs.h.ch=1;          // # of text pointer structs
+  regs.h.cl=0;          // # of text chars to ignore at beginning of string (none)
+  regs.h.dh=0;          // draw left to right
+  regs.h.dl=0xFF;       // color
+  regs.w.si=0;          // X origin
+  regs.w.di=0;          // Y origin
+  regs.w.es=FP_SEG(textpointer); // Text pointer (seg)
+  regs.w.bx=FP_OFF(textpointer); // Text pointer (off)
+  
   while (!kbhit())
     {
-      t.x=rand()&0xFF;
-      t.y=rand()&0x7F;
-      mindset_gfx_blt_string(0,1,0,0,rand()&0xFF,0,0,&t);
+      textpointer[0]=rand()&0xFF;
+      textpointer[1]=rand()&0x7F;
+      regs.h.dl=rand()&0xFF;
+      intr(0xEF,&regs);
     }
   
   return 0;

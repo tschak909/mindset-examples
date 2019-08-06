@@ -25,7 +25,7 @@ MCommand
 6
 MItem
 7
-blt.exe
+vbi.exe
 7
 WString
 3
@@ -85,7 +85,7 @@ WString
 COBJ
 21
 WVList
-9
+5
 22
 MVState
 23
@@ -111,7 +111,7 @@ WCC
 28
 WString
 21
-?????Compiler default
+?????No optimizations
 1
 0
 29
@@ -122,8 +122,8 @@ WString
 WCC
 31
 WString
-21
-?????2-byte alignment
+26
+?????Fastest possible code
 1
 1
 32
@@ -134,8 +134,8 @@ WString
 WCC
 34
 WString
-21
-?????No optimizations
+9
+??6??8086
 1
 0
 35
@@ -146,77 +146,29 @@ WString
 WCC
 37
 WString
-26
-?????Fastest possible code
-1
-1
-38
-MRState
-39
-WString
-3
-WCC
-40
-WString
-29
-?????No debugging information
-1
-1
-41
-MRState
-42
-WString
-3
-WCC
-43
-WString
-24
-?????Full debugging info
-1
-0
-44
-MRState
-45
-WString
-3
-WCC
-46
-WString
-9
-??6??8086
-1
-0
-47
-MRState
-48
-WString
-3
-WCC
-49
-WString
 10
 ??6??80186
 1
 1
-50
+38
 WVList
 0
 -1
 1
 1
 0
-51
+39
 MItem
 6
 main.c
-52
+40
 WString
 4
 COBJ
-53
+41
 WVList
 0
-54
+42
 WVList
 0
 19
