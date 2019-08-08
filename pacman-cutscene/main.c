@@ -292,8 +292,12 @@ int main(int argc, char* argv[])
   mindset_gfx_set_mode(2);
   mindset_gfx_set_palette(0,16,0,&palette);
   mindset_gfx_set_display_int_address(&vblank_handler);
-  blinky_chase_pacman();
-  pacman_chase_blinky();
+
+  while (!kbhit())
+    {
+      blinky_chase_pacman();
+      pacman_chase_blinky();
+    }
   
   mindset_gfx_set_display_int_address(0); // must disable.
   return 0;
